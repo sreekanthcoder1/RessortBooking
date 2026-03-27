@@ -1,0 +1,9 @@
+server:
+  port: 8085
+spring:
+  application:
+    name: notification-service
+app:
+  email:
+    sendgrid-key: ${SENDGRID_API_KEY:SG.placeholder}
+    from: ${APP_EMAIL:noreply@cottageai.com}

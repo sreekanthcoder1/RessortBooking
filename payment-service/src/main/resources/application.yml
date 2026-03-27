@@ -1,0 +1,36 @@
+server:
+  port: 8084
+spring:
+  application:
+    name: payment-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/cottagedb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: ${MYSQL_PASSWORD:162002}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+app:
+  jwt:
+    secret: ${JWT_SECRET:your-default-secret-change-in-production-make-it-long}
+  razorpay:
+    key-id: ${RAZORPAY_KEY_ID:rzp_test_placeholder}
+    key-secret: ${RAZORPAY_KEY_SECRET:placeholder_secret}
+  services:
+    booking-service: http://localhost:8083
+    cottage-service: http://localhost:8082
+    notification-service: http://localhost:8085
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:mysql}:3306/cottagedb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    password: ${MYSQL_PASSWORD}
+app:
+  services:
+    booking-service: http://booking-service:8083
+    cottage-service: http://cottage-service:8082
+    notification-service: http://notification-service:8085

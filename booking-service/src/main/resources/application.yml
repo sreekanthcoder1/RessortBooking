@@ -1,0 +1,34 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: booking-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/cottagedb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: ${MYSQL_PASSWORD:162002}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+app:
+  jwt:
+    secret: ${JWT_SECRET:your-default-secret-change-in-production-make-it-long}
+  services:
+    cottage-service: http://localhost:8082
+    payment-service: http://localhost:8084
+    notification-service: http://localhost:8085
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:mysql}:3306/cottagedb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    password: ${MYSQL_PASSWORD}
+app:
+  services:
+    cottage-service: http://cottage-service:8082
+    payment-service: http://payment-service:8084
+    notification-service: http://notification-service:8085
